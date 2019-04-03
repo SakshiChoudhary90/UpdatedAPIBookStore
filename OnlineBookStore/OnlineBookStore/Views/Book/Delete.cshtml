@@ -1,0 +1,59 @@
+﻿@model OnlineBookStore.Models.Book
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<br />
+<br />
+<br />
+
+@*<form asp-action="Delete" asp-controller="Book">
+
+        <label asp-for="BookId"></label>
+        <br />
+
+
+        <label asp-for="BookName"></label>
+        <br />
+
+        <label asp-for="BookPrice"></label>
+        <br />
+
+        <label asp-for="BookType"></label>
+        <br />
+
+        <label asp-for="BookImage"></label>
+        <br />
+
+        <input type="submit" value="Save" class="btn btn-primary" />
+
+    </form>*@
+
+
+
+<h2>Are you sure, you want to delete it?</h2>
+<br />
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <img src="~/images/logo.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title"><b>Book Id : </b>@Html.DisplayFor(model => model.BookId)</h5>
+                <p class="card-text">  <b> Book Name : </b> @Html.DisplayFor(model => model.BookName)</p>
+                <p class="card-text"><b> Book Price : </b> @Html.DisplayFor(model => model.BookPrice)</p>
+                <p class="card-text">  <b> Book Name : </b> @Html.DisplayFor(model => model.BookType)</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm("Delete", "Book", FormMethod.Post))
+{
+    <p>
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-controller="Book" asp-action="Index" class="btn btn-primary">Back To List</a>
+    </p>
+}

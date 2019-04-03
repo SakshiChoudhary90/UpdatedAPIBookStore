@@ -1,0 +1,34 @@
+﻿@model OnlineBookStore.Models.AuthorBiography
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<br />
+<br />
+<br />
+<h2>Are you sure, you want to delete it?</h2>
+<br />
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <img src="~/images/logo.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title"><b>Date of Birth : </b>@Html.DisplayFor(model => model.AuthorId)</h5>
+                <p class="card-text">  <b>Birth Place : </b> @Html.DisplayFor(model => model.BirthPlace)</p>
+                <p class="card-text"><b> Nationality : </b> @Html.DisplayFor(model => model.Nationality)</p>
+                <p class="card-text"><b> AuthorId : </b> @Html.DisplayFor(model => model.DateOfBirth)</p>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm("Delete", "Book", FormMethod.Post))
+{
+    <p>
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-controller="AuthorBiography" asp-action="Index" class="btn btn-primary">Back To List</a>
+    </p>
+}

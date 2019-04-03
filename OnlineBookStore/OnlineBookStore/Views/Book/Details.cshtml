@@ -1,0 +1,29 @@
+﻿@model OnlineBookStore.Models.Book
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<br />
+<br />
+<br />
+<h2>Details</h2>
+<br />
+
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <img src="~/images/logo.png" class="card-img" alt="...">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title"><b>Book Id : </b>@Html.DisplayFor(model => model.BookId)</h5>
+                <p class="card-text">  <b> Book Name : </b> @Html.DisplayFor(model => model.BookName)</p>
+                <p class="card-text"><b> Book Price : </b> @Html.DisplayFor(model => model.BookPrice)</p>
+                <p class="card-text">  <b> Book Name : </b> @Html.DisplayFor(model => model.BookType)</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<a asp-controller="Book" asp-action="Index" class="btn btn-primary">Back To List</a>

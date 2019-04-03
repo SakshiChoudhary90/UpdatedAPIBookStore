@@ -1,0 +1,31 @@
+﻿@model OnlineBookStore.Models.Publication
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<br />
+<br />
+<br />
+
+<h2><center><b><u>Edit Publication</u></b></center></h2>
+<br />
+
+
+
+<form asp-action="Edit" asp-controller="Publication">
+
+    @Html.HiddenFor(x => Model.PublicationId)
+    <div class="form-group">
+        <label asp-for="PublicationName"><b>Publication Name</b></label>
+        <input type="text" asp-for="PublicationName" class="form-control" placeholder="Enter Publication Name">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PublicationDescription"><b>Publication Description</b></label>
+        <input type="text" asp-for="PublicationDescription" class="form-control" placeholder="Enter Publication Description">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a asp-controller="Publication" asp-action="Index" class="btn btn-primary">Back To List</a>
+</form>

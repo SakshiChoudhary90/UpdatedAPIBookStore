@@ -1,0 +1,38 @@
+﻿@model OnlineBookStore.Models.AuthorBiography
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<br />
+<br />
+<br />
+<h2><center><b><u>Add Author Biography</u></b></center></h2>
+<br />
+
+
+<form asp-action="Create" asp-controller="AuthorBiography">
+    @*<div class="form-group">
+        <label for="AuthorId"><b>Author's Name</b></label>
+        <select asp-for="Author" asp-items="ViewBag.authors"></select>
+    </div>*@
+
+    <div class="form-group">
+        <label asp-for="DateOfBirth"><b>Author's Date Of Birth</b></label>
+        <input type="text" asp-for="DateOfBirth" class="form-control" placeholder="Enter Author's  Date Of Birth">
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BirthPlace"><b>Author's Birth Place</b></label>
+        <input type="text" asp-for="BirthPlace" class="form-control" placeholder="Enter Author's  Birth Place">
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Nationality"><b>Author's Nationality</b></label>
+        <input type="text" asp-for="Nationality" class="form-control" placeholder="Enter Author's  Nationality">
+    </div>
+    <input type="submit" value="Save" class="btn btn-success" />
+    <a asp-controller="AuthorBiography" asp-action="Index" class="btn btn-primary">Back To List</a>
+
+</form>
