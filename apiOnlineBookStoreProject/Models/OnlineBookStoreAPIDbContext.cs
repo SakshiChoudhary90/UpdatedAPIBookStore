@@ -9,6 +9,16 @@ namespace apiOnlineBookStoreProject.Models
 {
     public class OnlineBookStoreAPIDbContext : DbContext
     {
+        public OnlineBookStoreAPIDbContext()
+        {
+
+        }
+
+        public OnlineBookStoreAPIDbContext(DbContextOptions<OnlineBookStoreAPIDbContext>options):base(options)
+        {
+
+        }
+
         private object b;
 
         public DbSet<Admin> Admins { get; set; }
@@ -22,11 +32,20 @@ namespace apiOnlineBookStoreProject.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=TRD-512;Initial Catalog=api_Online_Bookdb;Integrated Security=true;");
+            //optionsBuilder.UseSqlServer("Data Source=TRD-512;Initial Catalog=api_Online_Bookdb;Integrated Security=true;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Publication>(entity =>
+            {
+                entity.Property(e => e.PublicationName)
+                .HasColumnName("PublicationName")
+                .HasMaxLength(5)
+                .IsUnicode(false);
+            });
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder
                .Entity<Customer>()
                .HasIndex(u => u.UserName)

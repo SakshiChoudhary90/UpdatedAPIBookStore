@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using apiOnlineBookStoreProject.Models;
 
 namespace apiOnlineBookStoreProject.Migrations
 {
     [DbContext(typeof(OnlineBookStoreAPIDbContext))]
-    partial class OnlineBookStoreAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190408101126_234")]
+    partial class _234
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,10 +188,7 @@ namespace apiOnlineBookStoreProject.Migrations
 
                     b.Property<string>("PublicationImage");
 
-                    b.Property<string>("PublicationName")
-                        .HasColumnName("PublicationName")
-                        .HasMaxLength(5)
-                        .IsUnicode(false);
+                    b.Property<string>("PublicationName");
 
                     b.HasKey("PublicationId");
 
