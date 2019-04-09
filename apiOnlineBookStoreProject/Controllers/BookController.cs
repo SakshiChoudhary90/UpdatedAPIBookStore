@@ -16,25 +16,42 @@ namespace apiOnlineBookStoreProject.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        OnlineBookStoreAPIDbContext context = new OnlineBookStoreAPIDbContext();
+        private readonly OnlineBookStoreAPIDbContext context;
+
+        public BookController(OnlineBookStoreAPIDbContext _context)
+        {
+            context = _context;
+        }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> Get()
         {
             return await context.Books.ToListAsync();
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> Get(int id)
+        public async Task<IActionResult> Get(int? id)
         {
-            var bk = await context.Books.FindAsync(id);
-            if (bk == null)
+            if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
-            return bk;
+            try
+            {
+
+                var bk = await context.Books.FindAsync(id);
+                if (bk == null)
+                {
+                    return NotFound();
+                }
+                return Ok(bk);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<Book>> Post([FromBody] Book bk)
+        public async Task<IActionResult> Post([FromBody] Book bk)
         {
             context.Books.Add(bk);
             await context.SaveChangesAsync();
@@ -43,7 +60,7 @@ namespace apiOnlineBookStoreProject.Controllers
 
         [HttpDelete("{id}")]
 
-        public async Task<ActionResult<Book>> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var bk = await context.Books.FindAsync(id);
             if (bk == null)
@@ -59,16 +76,23 @@ namespace apiOnlineBookStoreProject.Controllers
 
         [HttpPut("{id}")]
 
-        public async Task<ActionResult<Book>> Put(int id, [FromBody]Book newBook)
+        public async Task<IActionResult> Put(int? id, [FromBody]Book newBook)
         {
 
-            if (id != newBook.BookId)
+            if (id == null)
             {
                 return BadRequest();
             }
+
+            if (id != newBook.BookId)
+            {
+                return NotFound();
+            }
             context.Entry(newBook).State = EntityState.Modified;
             await context.SaveChangesAsync();
-            return NoContent();
+            return Ok(newBook);
+
+
         }
     }
 }

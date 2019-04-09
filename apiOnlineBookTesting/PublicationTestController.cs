@@ -32,7 +32,7 @@ namespace apiOnlineBookTesting
         public async void Task_GetPublicationById_Return_OkResult()
         {
             var controller = new PublicationController(context);
-            var PublicationId = 11;
+            var PublicationId = 15;
             var data = await controller.Get(PublicationId);
             Assert.IsType<OkObjectResult>(data);
         }
@@ -51,7 +51,7 @@ namespace apiOnlineBookTesting
 
             //Arrange
             var controller = new PublicationController(context);
-            var PublicationId = 11;
+            var PublicationId = 15;
 
             //Act
 
@@ -61,8 +61,8 @@ namespace apiOnlineBookTesting
             Assert.IsType<OkObjectResult>(data);
             var okResult = data.Should().BeOfType<OkObjectResult>().Subject;
             var publication = okResult.Value.Should().BeAssignableTo<Publication>().Subject;
-            Assert.Equal("abcde", publication.PublicationName);
-            Assert.Equal("df", publication.PublicationImage);
+            Assert.Equal("Baba2", publication.PublicationName);
+            Assert.Equal("123", publication.PublicationImage);
         }
         [Fact]
         public async void TaskGetPublicationById_Return_BadRequestResult()
@@ -131,7 +131,7 @@ namespace apiOnlineBookTesting
         {
             //Arrange
             var controller = new PublicationController(context);
-            var id = 14;
+            var id = 17;
             //Act
             var data = await controller.Delete(id);
 
@@ -156,45 +156,79 @@ namespace apiOnlineBookTesting
         public async void Task_Update_Publication_Return_OkResult()
         {
 
+
             //Arrange
             var controller = new PublicationController(context);
-            var PublicationId = 15;
+            int id = 19;
 
-            var data = await controller.Get(PublicationId);
+
+            var pub = new Publication()
+            {
+                PublicationId = 19,
+                PublicationName = "Kate",
+                PublicationDescription = "Professor",
+                PublicationImage = "123"
+            };
+
+            //Act
+
+            var updateData = await controller.Put(id, pub);
 
             //Assert
-            Assert.IsType<OkObjectResult>(data);
-            var okResult = data.Should().BeOfType<OkObjectResult>().Subject;
-            var publication = okResult.Value.Should().BeAssignableTo<Publication>().Subject;
-            var editpublication = new Publication()
-            {
-                PublicationId = publication.PublicationId,
-                PublicationName = "Baba",
-                PublicationDescription = publication.PublicationDescription,
-                PublicationImage =publication.PublicationImage
-            };
-            var updateData = await controller.Put(PublicationId, editpublication);
-
             Assert.IsType<OkObjectResult>(updateData);
+
         }
 
-
         [Fact]
-        public async void TaskPutPublicationById_Return_BadRequestResult()
+        public async void Task_Update_Publication_Return_BadRequest()
         {
 
             //Arrange
             var controller = new PublicationController(context);
             int? id = null;
 
+            var publication = new Publication()
+            {
+                PublicationId = 15,
+                PublicationName = "Delhi Publisher",
+                PublicationDescription = "New Delhi Publishers is an International repute publisher with an orientation towards research, practical and Technical Applications.",
+                PublicationImage = "123"
+            };
 
             //Act
 
-            var data = await controller.Get(id);
+            var data = await controller.Put(id, publication);
 
             //Assert
+
             Assert.IsType<BadRequestResult>(data);
 
+        }
+
+
+        [Fact]
+        public async void Task_Update_Publication_Return_NotFound()
+        {
+
+            //Arrange
+            var controller = new PublicationController(context);
+            var PublicationId = 21;
+
+            var author = new Publication()
+            {
+                PublicationId = 1,
+                PublicationName = "Delhi Publisher",
+                PublicationDescription = "New Delhi Publishers is an International repute publisher with an orientation towards research, practical and Technical Applications.",
+                PublicationImage = "123"
+            };
+
+            //Act
+
+            var data = await controller.Put(PublicationId, author);
+
+            //Assert
+
+            Assert.IsType<NotFoundResult>(data);
         }
 
     }

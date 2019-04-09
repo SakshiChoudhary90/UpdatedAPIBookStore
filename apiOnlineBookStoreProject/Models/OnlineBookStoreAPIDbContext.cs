@@ -19,8 +19,6 @@ namespace apiOnlineBookStoreProject.Models
 
         }
 
-        private object b;
-
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Publication> Publications { get; set; }
@@ -42,6 +40,13 @@ namespace apiOnlineBookStoreProject.Models
                 entity.Property(e => e.PublicationName)
                 .HasColumnName("PublicationName")
                 .HasMaxLength(5)
+                .IsUnicode(false);
+            });
+            modelBuilder.Entity<BookCategory>(entity =>
+            {
+                entity.Property(e => e.BookCategoryName)
+                .HasColumnName("BookCategoryNmae")
+                .HasMaxLength(15)
                 .IsUnicode(false);
             });
             base.OnModelCreating(modelBuilder);

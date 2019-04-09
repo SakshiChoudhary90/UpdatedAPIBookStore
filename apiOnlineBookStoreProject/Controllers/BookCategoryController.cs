@@ -16,34 +16,70 @@ namespace apiOnlineBookStoreProject.Controllers
     [ApiController]
     public class BookCategoryController : ControllerBase
     {
-        OnlineBookStoreAPIDbContext context = new OnlineBookStoreAPIDbContext();
+        private readonly OnlineBookStoreAPIDbContext context;
+
+        public BookCategoryController(OnlineBookStoreAPIDbContext _context)
+        {
+            context = _context;
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookCategory>>> Get()
         {
             return await context.BookCategories.ToListAsync();
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookCategory>> Get(int id)
+        public async Task<IActionResult> Get(int? id)
         {
-            var bkc = await context.BookCategories.FindAsync(id);
-            if (bkc == null)
+            if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
-            return bkc;
+            try
+            {
+
+                var bk = await context.BookCategories.FindAsync(id);
+                if (bk == null)
+                {
+                    return NotFound();
+                }
+                return Ok(bk);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
         }
 
         [HttpPost]
-        public async Task<ActionResult<BookCategory>> Post([FromBody] BookCategory bkc)
+        public async Task<IActionResult> Post([FromBody] BookCategory bkc)
         {
-            context.BookCategories.Add(bkc);
-            await context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = bkc.BookCategoryId, bkc });
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                try
+                {
+                    context.BookCategories.Add(bkc);
+                    await context.SaveChangesAsync();
+                    return CreatedAtAction(nameof(Get), new { id = bkc.BookCategoryId, bkc });
+                }
+
+                catch (Exception)
+                {
+                    return BadRequest();
+                }
+            }
+                                                  
+
         }
 
         [HttpDelete("{id}")]
 
-        public async Task<ActionResult<BookCategory>> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var bkc = await context.BookCategories.FindAsync(id);
             if (bkc == null)
@@ -52,23 +88,31 @@ namespace apiOnlineBookStoreProject.Controllers
             }
             context.BookCategories.Remove(bkc);
             await context.SaveChangesAsync();
-            return NoContent();
+            return Ok(bkc);
         }
 
 
 
         [HttpPut("{id}")]
 
-        public async Task<ActionResult<BookCategory>> Put(int id, [FromBody]BookCategory newBookCategory)
+        public async Task<IActionResult> Put(int? id, [FromBody]BookCategory newBookCategory)
         {
 
-            if (id != newBookCategory.BookCategoryId)
+
+            if (id == null)
             {
                 return BadRequest();
             }
+
+            if (id != newBookCategory.BookCategoryId)
+            {
+                return NotFound();
+            }
             context.Entry(newBookCategory).State = EntityState.Modified;
             await context.SaveChangesAsync();
-            return NoContent();
+            return Ok(newBookCategory);
+
+
         }
     }
 }

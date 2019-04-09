@@ -95,16 +95,24 @@ namespace apiOnlineBookStoreAdmin.Controllers
 
         [HttpPut("{id}")]
 
-        public async Task<IActionResult> Put(int id, [FromBody]Publication newpublication)
+        public async Task<IActionResult> Put(int? id, [FromBody]Publication newPublication)
         {
 
-            if (id != newpublication.PublicationId)
+
+            if (id == null)
             {
                 return BadRequest();
             }
-            _context.Entry(newpublication).State = EntityState.Modified;
+
+            if (id != newPublication.PublicationId)
+            {
+                return NotFound();
+            }
+            _context.Entry(newPublication).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return Ok(newpublication);
+            return Ok(newPublication);
+
+
         }
     }
 }

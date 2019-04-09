@@ -2,73 +2,132 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using apiOnlineBookStoreProject.Models;
-using coreBookStore.Models;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.EntityFrameworkCore;
 
-namespace apiOnlineBookStoreProject.Controllers
+using coreBookStore.Models;
+using apiOnlineBookStoreProject.Models;
+
+namespace apiOnlineBookStoreAdmin.Controllers
 {
     [EnableCors("AllowMyOrigin")]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorController : ControllerBase
     {
-    OnlineBookStoreAPIDbContext context = new OnlineBookStoreAPIDbContext();
+        private readonly OnlineBookStoreAPIDbContext _context;
+
+        public AuthorController(OnlineBookStoreAPIDbContext context)
+        {
+            _context = context;
+        }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Author>>> Get()
         {
-            return await context.Authors.ToListAsync();
+            return await _context.Authors.ToListAsync();
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Author>> Get(int id)
+        public async Task<IActionResult> Get(int? id)
         {
-            var pub = await context.Authors.FindAsync(id);
-            if (pub == null)
+
+
+            if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
-            return pub;
+            try
+            {
+
+                var author = await _context.Authors.FindAsync(id);
+                if (author == null)
+                {
+                    return NotFound();
+                }
+                return Ok(author);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<Author>> Post([FromBody] Author aut)
+        public async Task<IActionResult> Post([FromBody] Author aut)
         {
-            context.Authors.Add(aut);
-            await context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = aut.AuthorId, aut });
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            else
+
+            {
+                try
+                {
+                    _context.Authors.Add(aut);
+                    await _context.SaveChangesAsync();
+                    return CreatedAtAction(nameof(Get), new { id = aut.AuthorId, aut });
+                }
+
+                catch (Exception)
+                {
+                    return BadRequest();
+                }
+            }
+
+
+
         }
 
         [HttpDelete("{id}")]
 
-        public async Task<ActionResult<Author>> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            var aut = await context.Authors.FindAsync(id);
-            if (aut == null)
-            {
-                return NotFound();
-            }
-            context.Authors.Remove(aut);
-            await context.SaveChangesAsync();
-            return NoContent();
-        }
-
-        
-
-        [HttpPut("{id}")]
-
-        public async Task<ActionResult<Author>> Put(int id, [FromBody]Author newAuthor)
-        {
-
-            if (id != newAuthor.AuthorId)
+            if (id == null)
             {
                 return BadRequest();
             }
-            context.Entry(newAuthor).State = EntityState.Modified;
-            await context.SaveChangesAsync();
-            return NoContent();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var author = await _context.Authors.FindAsync(id);
+            if (author == null)
+            {
+                return NotFound();
+            }
+            _context.Authors.Remove(author);
+            await _context.SaveChangesAsync();
+            return Ok(author);
+        }
+
+
+
+
+
+
+        [HttpPut("{id}")]
+
+        public async Task<IActionResult> Put(int? id, [FromBody]Author newAuthor)
+        {
+
+
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            if (id != newAuthor.AuthorId)
+            {
+                return NotFound();
+            }
+            _context.Entry(newAuthor).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok(newAuthor);
+
+
         }
     }
 }
